@@ -6,10 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account:"
+    />
     <EditText
-        android:id="@+id/main_editText"
+        android:id="@+id/accountEdit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SeatIdNumber:"
+        />
+
+    <EditText
+        android:id="@+id/seatIdNumberEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checkout:"
+        />
+    <EditText
+        android:id="@+id/checkOutEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

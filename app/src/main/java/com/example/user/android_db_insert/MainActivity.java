@@ -18,38 +18,45 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
-    private EditText editText;
+    private EditText editText01,editText02,editText03;
     private UIHandler uiHandler;
-    private Editable text;
+    private Editable text01,text02,text03;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = (TextView) findViewById(R.id.main_textView);
-        editText = (EditText) findViewById(R.id.main_editText);
+        editText01 = (EditText) findViewById(R.id.accountEdit);
+        editText02 = (EditText) findViewById(R.id.seatIdNumberEdit);
+        editText03 = (EditText) findViewById(R.id.checkOutEdit);
+
 
         uiHandler = new UIHandler();
     }
 
     public void button(View v) {
-        text = editText.getText();
+        text01 = editText01.getText();
+        text02 = editText02.getText();
+        text03 = editText03.getText();
         new Thread() {
             @Override
             public void run() {
                 try {
-                    MultipartUtility mu = new MultipartUtility("https://android-test-db-ppking2897.c9users.io/DataBase/AccountQuery02.php", "UTF-8");
-                    mu.addFormField("");
+                    MultipartUtility mu = new MultipartUtility("https://android-test-db-ppking2897.c9users.io/DataBase/Insert02.php", "UTF-8");
+                    mu.addFormField("accountId",text01.toString());
+                    mu.addFormField("seatIdNumber",text02.toString());
+                    mu.addFormField("checkOut",text03.toString());
 
                     List<String> ret = mu.finish();
 
-                    parseJSON(ret.toString());
 
-//                    Message mesg = new Message();
-//                    Bundle data = new Bundle();
-//                    data.putCharSequence("data",ret.toString());
-//                    mesg.setData(data);
-//                    mesg.what=0;
-//                    uiHandler.sendMessage(mesg);
+
+                    Message mesg = new Message();
+                    Bundle data = new Bundle();
+                    data.putCharSequence("data",ret.toString());
+                    mesg.setData(data);
+                    mesg.what=0;
+                    uiHandler.sendMessage(mesg);
 
                 } catch (Exception e) {
                     Log.v("ppking", "DB Error:" + e.toString());
@@ -59,35 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void parseJSON(String json){
-        LinkedList accountInfo = new LinkedList<>();
-        try{
-
-            JSONObject jsonObject = new JSONArray(json).getJSONObject(0);
-
-            String stringNo1 = jsonObject.getString("Account");
-            accountInfo.add(stringNo1);
-            String stringNo2 = jsonObject.getString("SeatIdNumber");
-            accountInfo.add(stringNo2);
-            String stringNo3 = jsonObject.getString("Checkout");
-            accountInfo.add(stringNo3);
-
-            Log.v("ppking" , " ::"+accountInfo.get(1));
-
-            Message mesg = new Message();
-            Bundle data = new Bundle();
-            data.putCharSequence("data0",accountInfo.get(0).toString());
-            data.putCharSequence("data1",accountInfo.get(1).toString());
-            data.putCharSequence("data2",accountInfo.get(2).toString());
-            mesg.setData(data);
-            mesg.what=0;
-            uiHandler.sendMessage(mesg);
-
-
-        }catch (Exception e){
-            Log.v("ppking", "Error : " + e.toString());
-        }
-    }
 
 
 
@@ -97,9 +75,8 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0 :
-                    textView.setText("Accound : "+msg.getData().getCharSequence("data0")+"\n");
-                    textView.append("SeatIdNumber : "+msg.getData().getCharSequence("data1")+"\n");
-                    textView.append("Checkout : $"+msg.getData().getCharSequence("data2")+"\n");
+                    textView.setText(msg.getData().getCharSequence("data")+"\n");
+
                     break;
             }
         }
